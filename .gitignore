@@ -4,6 +4,7 @@ dist/
 data/
 .tmp/
 .tmp-cp-source/
+bin/cloudflared.exe
 
 *.log
 npm-debug.log*
