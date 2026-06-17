@@ -8,13 +8,15 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
-        arch:
-          - x64
-          - arm64
+        include:
+          - arch: x64
+            runner: macos-13
+          - arch: arm64
+            runner: macos-latest
 
     steps:
       - name: Checkout
@@ -27,7 +29,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --cpu=${{ matrix.arch }}
 
       - name: Typecheck
         run: npm run typecheck
@@ -45,6 +47,6 @@ jobs:
         with:
           name: local-live-share-macos-${{ matrix.arch }}
           path: |
-            release/*.dmg
-            release/*-mac*.zip
+            release/*${{ matrix.arch }}*.dmg
+            release/*${{ matrix.arch }}*.zip
           if-no-files-found: error
