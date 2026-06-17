@@ -40,13 +40,13 @@ jobs:
       - name: Build macOS package
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
-        run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --publish never
+        run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --publish never --config.directories.output=release/${{ matrix.arch }}
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: local-live-share-macos-${{ matrix.arch }}
           path: |
-            release/*${{ matrix.arch }}*.dmg
-            release/*${{ matrix.arch }}*.zip
+            release/${{ matrix.arch }}/*.dmg
+            release/${{ matrix.arch }}/*.zip
           if-no-files-found: error
