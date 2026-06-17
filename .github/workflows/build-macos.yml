@@ -9,6 +9,12 @@ on:
 jobs:
   build-macos:
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x64
+          - arm64
 
     steps:
       - name: Checkout
@@ -32,12 +38,12 @@ jobs:
       - name: Build macOS package
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
-        run: npx electron-builder --mac dmg zip --universal --publish never
+        run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --publish never
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: local-live-share-macos
+          name: local-live-share-macos-${{ matrix.arch }}
           path: |
             release/*.dmg
             release/*-mac*.zip
